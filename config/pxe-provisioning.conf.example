@@ -1,0 +1,17 @@
+# Linux PXE Provisioning example configuration
+# Copy to /etc/pxe-provisioning.conf and adjust for the target network.
+
+PXE_INTERFACE="ens18"
+PXE_PROXY_ADDRESS="192.0.2.0"
+PXE_SERVER_ADDRESS="192.0.2.10"
+PXE_BASE_URL="http://192.0.2.10"
+
+TFTP_ROOT="/srv/pxe/tftp"
+HTTP_ROOT="/srv/pxe/http"
+
+ALMA_VERSION="9.8"
+ALMA_REPO_URL="https://repo.almalinux.org/almalinux/9.8/BaseOS/x86_64/os/"
+ALMA_KICKSTART_URL=""
+
+UBUNTU_VERSION="24.04.5"
+UBUNTU_AUTOINSTALL_URL=""

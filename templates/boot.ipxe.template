@@ -1,0 +1,34 @@
+#!ipxe
+# Reference template. The installer renders the active menu from site configuration.
+
+set base {{PXE_BASE_URL}}
+
+:menu
+menu Linux PXE Provisioning
+item --gap -- ---------------- Linux installers ----------------
+item alma AlmaLinux {{ALMA_VERSION}}
+item ubuntu Ubuntu Server {{UBUNTU_VERSION}} LTS
+item shell iPXE shell
+item reboot Reboot
+choose --default shell --timeout 8000 target && goto ${target}
+
+:alma
+kernel ${base}/alma/{{ALMA_VERSION}}/vmlinuz initrd=initrd.img ip=dhcp inst.repo={{ALMA_REPO_URL}}{{ALMA_KICKSTART_ARGUMENT}}
+initrd ${base}/alma/{{ALMA_VERSION}}/initrd.img
+boot || goto failed
+
+:ubuntu
+kernel ${base}/ubuntu/{{UBUNTU_VERSION}}/vmlinuz initrd=initrd ip=dhcp url=${base}/ubuntu/{{UBUNTU_VERSION}}/ubuntu.iso{{UBUNTU_AUTOINSTALL_ARGUMENT}} ---
+initrd ${base}/ubuntu/{{UBUNTU_VERSION}}/initrd
+boot || goto failed
+
+:shell
+shell
+goto menu
+
+:reboot
+reboot
+
+:failed
+echo Boot failed. Check media paths, HTTP reachability, and installer arguments.
+shell
