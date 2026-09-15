@@ -2,7 +2,7 @@
 
 Portfolio-ready network boot toolkit for x86_64 Linux environments. The project keeps the site's existing DHCP server authoritative and adds a dedicated PXE service using **dnsmasq in ProxyDHCP mode**, **iPXE chainloading**, and **HTTP delivery** for boot assets.
 
-> Status: v2 redesign. The original repository history is intentionally preserved; the implementation in this branch replaces the legacy single-script PXELINUX/ThinStation experiment with a safer and more maintainable architecture.
+The original repository history is intentionally preserved; the current implementation replaces the legacy single-script PXELINUX/ThinStation experiment with a safer and more maintainable architecture.
 
 ## Architecture
 
@@ -60,8 +60,8 @@ The OS versions are defaults in the example configuration, not hard-coded requir
 ## Installation
 
 ```bash
-git clone https://github.com/greksw/pxe_server.git
-cd pxe_server
+git clone https://github.com/greksw/linux-pxe-provisioning.git
+cd linux-pxe-provisioning
 
 sudo install -m 0640 \
   config/pxe-provisioning.conf.example \
@@ -178,20 +178,11 @@ Test first on an isolated provisioning VLAN or with a disposable VM configured f
 
 GitHub Actions performs Bash syntax validation and ShellCheck static analysis. CI does not replace an end-to-end PXE boot test on real firmware/network hardware.
 
-## Migration from the legacy scripts
+## Repository history
 
-The v2 branch removes these legacy patterns:
+The repository preserves the original PXE automation history while the current implementation removes hard-coded infrastructure values, embedded credentials, unsafe CIFS modes, broad firewall modification, interactive `chroot` automation, and the PXELINUX-only boot flow.
 
-- hard-coded internal server addresses;
-- embedded SMB credentials;
-- `file_mode=0777,dir_mode=0777` CIFS mounts;
-- automatic generation of a personal GitHub SSH key;
-- replacing the global `/etc/dnsmasq.conf`;
-- broad firewall modification;
-- interactive `chroot` automation;
-- PXELINUX-only boot flow.
-
-After v2 is accepted, the repository is intended to be renamed to **`linux-pxe-provisioning`**. The separate `pxe_server2` repository can then be archived.
+The earlier companion `pxe_server2` experiment has been retired after consolidation into this repository.
 
 ## License
 
