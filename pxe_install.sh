@@ -5,6 +5,7 @@ umask 027
 CONFIG_FILE="${1:-/etc/pxe-provisioning.conf}"
 DNSMASQ_CONFIG="/etc/dnsmasq.d/pxe-provisioning.conf"
 NGINX_CONFIG="/etc/nginx/conf.d/pxe-provisioning.conf"
+IPXE_PACKAGE="ipxe-bootimgs-x86"
 
 log() {
     printf '[%s] %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$*"
@@ -49,15 +50,15 @@ load_config() {
 install_packages() {
     log 'Installing PXE service packages.'
     dnf install -y epel-release
-    dnf install -y dnsmasq nginx ipxe-bootimgs python3
+    dnf install -y dnsmasq nginx "${IPXE_PACKAGE}" python3 curl
 }
 
 find_ipxe_image() {
     local filename=$1
     local result
 
-    result=$(rpm -ql ipxe-bootimgs | awk -v wanted="/${filename}" '$0 ~ wanted "$" { print; exit }')
-    [[ -n "${result}" && -f "${result}" ]] || fatal "Could not locate ${filename} in package ipxe-bootimgs."
+    result=$(rpm -ql "${IPXE_PACKAGE}" | awk -v wanted="/${filename}" '$0 ~ wanted "$" { print; exit }')
+    [[ -n "${result}" && -f "${result}" ]] || fatal "Could not locate ${filename} in package ${IPXE_PACKAGE}."
     printf '%s\n' "${result}"
 }
 
